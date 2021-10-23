@@ -5,17 +5,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["CardDungeon/CardDungeon.csproj", "CardDungeon/"]
-RUN dotnet restore "CardDungeon/CardDungeon.csproj"
+COPY ["WeatherForecast/WeatherForecast.csproj", "WeatherForecast/"]
+RUN dotnet restore "WeatherForecast/WeatherForecast.csproj"
 COPY . .
-WORKDIR "/src/CardDungeon"
-RUN dotnet build "CardDungeon.csproj" -c Release -o /app/build
+WORKDIR "/src/WeatherForecast"
+RUN dotnet build "WeatherForecast.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "CardDungeon.csproj" -c Release -o /app/publish
+RUN dotnet publish "WeatherForecast.csproj" -c Release -o /app/publish
 
 FROM base AS final
 ENV ASPNETCORE_URLS: http://+:80
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CardDungeon.dll"]
+ENTRYPOINT ["dotnet", "WeatherForecast.dll"]
